@@ -8,9 +8,9 @@ public class Administrativo extends Personal {
 	private String extensionTelefonica;
 
 	public Administrativo(int id, String nombre, String apellidos, String cedula, Date fechaNacimiento, String correo,
-			String telefono, double salarioBase, boolean estado, String departamento, String cargo,
+			String telefono, double salarioBase, boolean estado, Sucursal sucursal, String departamento, String cargo,
 			String extensionTelefonica) {
-		super(id, nombre, apellidos, cedula, fechaNacimiento, correo, telefono, salarioBase, estado);
+		super(id, nombre, apellidos, cedula, fechaNacimiento, correo, telefono, salarioBase, estado, sucursal);
 		this.departamento = departamento;
 		this.cargo = cargo;
 		this.extensionTelefonica = extensionTelefonica;

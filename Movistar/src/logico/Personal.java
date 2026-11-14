@@ -12,9 +12,10 @@ public abstract class Personal {
 	protected String telefono;
 	protected double salarioBase;
 	protected boolean estado;
+	protected Sucursal sucursal;
 
 	public Personal(int id, String nombre, String apellidos, String cedula, Date fechaNacimiento, String correo,
-			String telefono, double salarioBase, boolean estado) {
+			String telefono, double salarioBase, boolean estado, Sucursal sucursal) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -25,6 +26,7 @@ public abstract class Personal {
 		this.telefono = telefono;
 		this.salarioBase = salarioBase;
 		this.estado = estado;
+		this.sucursal = sucursal;
 	}
 
 	public String getNombre() {
@@ -89,6 +91,14 @@ public abstract class Personal {
 
 	public String getCedula() {
 		return cedula;
+	}
+	
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
+	}
+	
+	public Sucursal getSucursal() {
+		return sucursal;
 	}
 
 }

@@ -8,9 +8,9 @@ public class Comercial extends Personal {
 	private double ventasAcumuladas;
 
 	public Comercial(int id, String nombre, String apellidos, String cedula, Date fechaNacimiento, String correo,
-			String telefono, double salarioBase, boolean estado, double comision, String zonaAsignada,
+			String telefono, double salarioBase, boolean estado, Sucursal sucursal, double comision, String zonaAsignada,
 			double ventasAcumuladas) {
-		super(id, nombre, apellidos, cedula, fechaNacimiento, correo, telefono, salarioBase, estado);
+		super(id, nombre, apellidos, cedula, fechaNacimiento, correo, telefono, salarioBase, estado, sucursal);
 		this.comision = comision;
 		this.zonaAsignada = zonaAsignada;
 		this.ventasAcumuladas = ventasAcumuladas;
