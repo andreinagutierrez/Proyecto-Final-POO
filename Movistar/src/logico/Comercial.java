@@ -39,4 +39,10 @@ public class Comercial extends Personal {
 	public void setVentasAcumuladas(double ventasAcumuladas) {
 		this.ventasAcumuladas = ventasAcumuladas;
 	}
+	
+	public void registrarVenta(double monto) {
+		if(monto > 0 ) {
+			ventasAcumuladas += monto;
+		}
+	}
 }

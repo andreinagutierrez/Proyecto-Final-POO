@@ -74,5 +74,45 @@ public class Cliente {
 		return id;
 	}
 
+	public boolean agregarPlan(Plan p) {
+	    if (p == null || tienePlan(p.getId())) {
+	        return false;
+	    }
+	    planesContratados.add(p);
+	    return true;
+	}
 
+	public boolean tienePlan(int idPlan) {
+	    for (Plan p : planesContratados) {
+	        if (p.getId() == idPlan) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+
+	public boolean quitarPlan(int idPlan) {
+		for(int ind = 0; ind < planesContratados.size(); ind++) {
+			if(planesContratados.get(ind).getId() == idPlan) {
+				planesContratados.remove(ind);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void aumentarDeuda(double montoTotal) {
+		if(montoTotal > 0) {
+			deuda += montoTotal;
+		}
+	}
+	
+	public void reducirDeuda(double monto) {
+	    if (monto > 0) {
+	        deuda -= monto;
+	        if (deuda < 0) {
+	            deuda = 0;
+	        }
+	    }
+	}
 }

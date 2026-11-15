@@ -17,7 +17,11 @@ public class Plan {
 	}
 	
 	public double calcularPrecio() {
-		return 0.0; //TODO
+		double total = 0;
+		for(Servicio s: serviciosIncluidos) {
+		    total += s.getPrecioIndividual();
+		}
+		return total; 
 	}
 	
 	public int getId() {
@@ -39,8 +43,18 @@ public class Plan {
 		serviciosIncluidos.add(s);
 		this.precioMensual = calcularPrecio();
 	}
+
 	public double getPrecioMensual() {
 		return precioMensual;
+	}
+	
+	public boolean incluyeServicio(int idServicio) {
+		for(Servicio s: serviciosIncluidos) {
+			if(s.getId() == idServicio) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

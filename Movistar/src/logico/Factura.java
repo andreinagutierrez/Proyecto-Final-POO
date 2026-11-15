@@ -20,13 +20,17 @@ public class Factura {
 		this.cliente = cliente;
 		this.vendedor = vendedor;
 		this.sucursal = vendedor.getSucursal();
-		this.planesFacturados = new ArrayList<>();
+		this.planesFacturados = new ArrayList<>(cliente.getPlanesContratados());
 		this.montoTotal = calcularTotal();
 		this.pagada = false;
 	}
 	
 	public double calcularTotal() {
-		return 0.0; //TODO
+		double total = 0.0;
+		for(Plan p: planesFacturados) {
+			total += p.calcularPrecio();
+		}
+		return total;
 	}
 	public Sucursal getSucursal() {
 		return sucursal;
