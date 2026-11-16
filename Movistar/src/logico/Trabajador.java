@@ -28,4 +28,17 @@ public class Trabajador extends Personal {
 	public void setTurno(String turno) {
 		this.turno = turno;
 	}
+
+	public double calcularSalario() {
+		double salario = this.salarioBase;
+
+		if(this.turno.equalsIgnoreCase("Nocturno")) {
+			double extraNocturno = this.salarioBase * 0.15;
+			salario += extraNocturno;
+		} else if (this.turno.equalsIgnoreCase("Feriado") || this.turno.equalsIgnoreCase("Fin de Semana")) {
+			double diasExtra = this.salarioBase * 0.10;
+		}
+
+		return salario;
+	}
 }

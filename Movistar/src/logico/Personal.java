@@ -92,13 +92,15 @@ public abstract class Personal {
 	public String getCedula() {
 		return cedula;
 	}
-	
+
 	public void setSucursal(Sucursal sucursal) {
 		this.sucursal = sucursal;
 	}
-	
+
 	public Sucursal getSucursal() {
 		return sucursal;
 	}
+
+	public abstract double calcularSalario();
 
 }

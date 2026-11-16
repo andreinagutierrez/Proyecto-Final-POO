@@ -40,4 +40,18 @@ public class Administrativo extends Personal {
 		this.extensionTelefonica = extensionTelefonica;
 	}
 
+	@Override
+	public double calcularSalario() {
+		// TODO Auto-generated method stub
+		double salario = this.salarioBase;
+		
+		if(this.cargo.equalsIgnoreCase("Gerente")) {
+			salario += 20000;
+		} else if (this.cargo.equalsIgnoreCase("Supervisor")) {
+			salario += 8000;
+		}
+		return salario;
+	}
+
+	
 }
