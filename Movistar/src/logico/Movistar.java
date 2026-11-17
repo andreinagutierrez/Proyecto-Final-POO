@@ -309,4 +309,14 @@ public class Movistar {
 		}
 		return resultadosLocal;
 	}
+	
+	public ArrayList<Factura> facturasCliente(int idCliente){
+		ArrayList<Factura> facturasCliente = new ArrayList<>();
+		for(Factura f: lasFacturas) {
+			if(f.getCliente() != null && f.getCliente().getId() == idCliente) {
+				facturasCliente.add(f);
+			}
+		}
+		return facturasCliente;
+	}
 }
