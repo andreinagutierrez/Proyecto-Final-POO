@@ -19,7 +19,7 @@ public class Plan {
 	public double calcularPrecio() {
 		double total = 0;
 		for(Servicio s: serviciosIncluidos) {
-		    total += s.getPrecioIndividual();
+		    total += s.calcularPrecio();
 		}
 		if(serviciosIncluidos.size() >= 2) {
 			total = total * 0.9;

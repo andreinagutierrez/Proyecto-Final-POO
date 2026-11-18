@@ -1,16 +1,18 @@
 package logico;
 
-public class Servicio {
-	private int id;
-	private String nombre;
-	private double precioIndividual;
+public abstract class Servicio {
+	protected int id;
+	protected String nombre;
+	protected double precioBase;
 	
-	public Servicio(int id, String nombre, double precioIndividual) {
+	public Servicio(int id, String nombre, double precioBase) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
-		this.precioIndividual = precioIndividual;
+		this.precioBase = precioBase;
 	}
+	
+	public abstract double calcularPrecio();
 	
 	public int getId() {
 		return id;
@@ -29,11 +31,11 @@ public class Servicio {
 	}
 
 	public double getPrecioIndividual() {
-		return precioIndividual;
+		return precioBase;
 	}
 
-	public void setPrecioIndividual(double precioIndividual) {
-		this.precioIndividual = precioIndividual;
+	public void setPrecioIndividual(double precioBase) {
+		this.precioBase = precioBase;
 	}
 
 }
