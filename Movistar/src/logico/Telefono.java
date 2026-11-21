@@ -2,6 +2,7 @@ package logico;
 
 public class Telefono extends Servicio{
 	
+	private static final long serialVersionUID = 1L;
 	private int numTelefono;
 	private int cantMinutos;
 	

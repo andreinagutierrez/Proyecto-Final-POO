@@ -1,9 +1,20 @@
 package logico;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Movistar {
+public class Movistar implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+	private static final String RUTA_DAT = "movistar.dat";
+	private static Movistar instancia;
 	private ArrayList<Personal> losEmpleados;
 	private ArrayList<Cliente> losClientes;
 	private ArrayList<Plan> losPlanes;
@@ -19,13 +30,76 @@ public class Movistar {
 		this.losServicios = new ArrayList<>();
 	}
 	
+	public static Movistar getInstance() {
+		if(instancia == null) {
+			cargarDatos();
+		}
+		return instancia;
+	}
+	public static void setInstance(Movistar nueva) {
+		instancia = nueva;
+		
+	}
+	public static Movistar cargarDatos() {
+		File archivo = new File(RUTA_DAT);
+		if(!archivo.exists()) {
+			Movistar nuevaInstancia = new Movistar();
+			nuevaInstancia.cargarDatosIniciales();
+			setInstance(nuevaInstancia);
+			nuevaInstancia.guardarDatos();
+			return nuevaInstancia;
+		}
+		try(FileInputStream lectura = new FileInputStream(archivo);
+			ObjectInputStream conversion = new ObjectInputStream(lectura)){
+			Movistar empresaCargada = (Movistar)conversion.readObject();
+			setInstance(empresaCargada);
+			return empresaCargada;
+		}catch(IOException | ClassNotFoundException e) {
+			Movistar respaldo = new Movistar();
+			respaldo.cargarDatosIniciales();
+			setInstance(respaldo);
+			return respaldo;
+		}
+	}
+	public void guardarDatos() {
+		try(FileOutputStream apertura = new FileOutputStream(RUTA_DAT);
+			ObjectOutputStream escritura = new ObjectOutputStream(apertura)){
+			
+			escritura.writeObject(this);
+			
+		}catch(IOException e) {
+			System.out.println("Error al guardar: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+	}
+	public void cargarDatosIniciales() {
+		Internet internet = new Internet(1, "Internet qsy", 100, 50, 25, "Fibra");
+		Cable cable = new Cable(2, "Cable idk", 150, 165);
+		Telefono telefono = new Telefono(3, "Telefono", 50, 505, 100);
+		this.registrarServicio(internet);
+		this.registrarServicio(cable);
+		this.registrarServicio(telefono);
+		Plan plan = new Plan(1, "Plan");
+		plan.agregarServicio(internet);
+		plan.agregarServicio(cable);
+		plan.agregarServicio(telefono);
+		this.registrarPlan(plan);
+		Sucursal sucu = new Sucursal(1, "Manoguayabo", "Manoguayabo??");
+		Administrativo admin = new Administrativo(1,"John","Doeee", "402182392", new Date(), "dumb@gmail.com",
+				"8081031", 500, true, sucu, "no se", "no se tampoco","ni idea");
+		this.losEmpleados.add(admin);
+		
+		
+	}
+	
 	public ArrayList<Personal> getLosEmpleados() {
 		return losEmpleados;
 	}
 	public ArrayList<Cliente> getLosClientes() {
 		return losClientes;
 	}
-	public ArrayList<Plan> listarPlanes() {
+	public ArrayList<Plan> getLosPlanes() {
 		return losPlanes;
 	}
 	public ArrayList<Factura> getLasFacturas() {
@@ -34,6 +108,7 @@ public class Movistar {
 	public ArrayList<Servicio> listarServicios() {
 		return losServicios;
 	}
+	
 	
 	public boolean registrarCliente(Cliente c) {
 		if(c == null) {

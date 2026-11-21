@@ -3,6 +3,8 @@ package logico;
 import java.util.Date;
 
 public class Administrativo extends Personal {
+	
+	private static final long serialVersionUID = 1L;
 	private String departamento;
 	private String cargo;
 	private String extensionTelefonica;

@@ -1,8 +1,11 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public abstract class Personal {
+public abstract class Personal implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	protected int id;
 	protected String nombre;
 	protected String apellidos;

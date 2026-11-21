@@ -2,6 +2,7 @@ package logico;
 
 public class Cable extends Servicio{
 	
+	private static final long serialVersionUID = 1L;
 	private int cantCanales;
 	
 	public Cable(int id, String nombre, double precioBase, int cantCanales) {

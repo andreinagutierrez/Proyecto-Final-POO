@@ -1,6 +1,10 @@
 package logico;
 
-public abstract class Servicio {
+import java.io.Serializable;
+
+public abstract class Servicio implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	protected int id;
 	protected String nombre;
 	protected double precioBase;
