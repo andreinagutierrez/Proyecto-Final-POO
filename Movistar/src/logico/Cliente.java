@@ -13,6 +13,7 @@ public class Cliente implements Serializable{
 	private String direccion;
 	private double deuda;
 	private ArrayList<Plan> planesContratados;
+	private boolean contratoActivo;
 
 	public Cliente(int id, String nombre, String apeliidos, String telefono, String direccion, double deuda) {
 		super();
@@ -23,6 +24,7 @@ public class Cliente implements Serializable{
 		this.direccion = direccion;
 		this.deuda = deuda;
 		this.planesContratados = new ArrayList<>();
+		this.contratoActivo = true;
 	}
 
 	public String getNombre() {
@@ -76,6 +78,14 @@ public class Cliente implements Serializable{
 	public int getId() {
 		return id;
 	}
+	
+	public boolean isContratoActivo() {
+		return contratoActivo;
+	}
+
+	public void setContratoActivo(boolean contratoActivo) {
+		this.contratoActivo = contratoActivo;
+	}
 
 	public boolean agregarPlan(Plan p) {
 	    if (p == null || tienePlan(p.getId())) {
@@ -102,6 +112,10 @@ public class Cliente implements Serializable{
 			}
 		}
 		return false;
+	}
+	
+	public void quitarTodosLosPlanes() {
+	    planesContratados.clear();
 	}
 
 	public void aumentarDeuda(double montoTotal) {

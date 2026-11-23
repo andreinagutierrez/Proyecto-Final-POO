@@ -54,7 +54,7 @@ public class Plan implements Serializable{
 		return precioMensual;
 	}
 	
-	public boolean eliminarServicio(int id) {
+	public boolean quitarServicio(int id) {
 		
 		for(int i = 0; i < serviciosIncluidos.size(); i++) {
 			if(serviciosIncluidos.get(i).getId() == id) {

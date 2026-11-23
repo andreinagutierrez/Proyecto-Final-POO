@@ -3,19 +3,19 @@ package logico;
 public class Telefono extends Servicio{
 	
 	private static final long serialVersionUID = 1L;
-	private int numTelefono;
+	private String numTelefono;
 	private int cantMinutos;
 	
-	public Telefono(int id, String nombre, double precioBase, int numTelefono, int cantMinutos) {
+	public Telefono(int id, String nombre, double precioBase, String numTelefono, int cantMinutos) {
 		super(id, nombre, precioBase);
 		this.numTelefono = numTelefono;
 		this.cantMinutos = cantMinutos;
 	}
 	
-	public int getNumTelefono() {
+	public String getNumTelefono() {
 		return numTelefono;
 	}
-	public void setNumTelefono(int numTelefono) {
+	public void setNumTelefono(String numTelefono) {
 		this.numTelefono = numTelefono;
 	}
 	public int getCantMinutos() {

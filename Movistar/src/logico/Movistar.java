@@ -8,18 +8,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Movistar implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-	private static final String RUTA_DAT = "movistar.dat";
+	public static final String RUTA_DAT = "movistar.dat";
 	private static Movistar instancia;
 	private ArrayList<Personal> losEmpleados;
 	private ArrayList<Cliente> losClientes;
 	private ArrayList<Plan> losPlanes;
 	private ArrayList<Factura> lasFacturas;
 	private ArrayList<Servicio> losServicios;
+	private static Personal usuarioActual;
 	
 	public Movistar() {
 		super();
@@ -40,6 +42,21 @@ public class Movistar implements Serializable{
 		instancia = nueva;
 		
 	}
+	
+	public static Personal getUsuarioActual() {
+		return usuarioActual;
+	}
+
+	public boolean confirmarSesion(String user, String clave) {
+		for(Personal p: losEmpleados) {
+			if (user.equals(p.getUsuario()) && clave.equals(p.getClave()) && p.isEstado()) {
+				usuarioActual = p;
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static Movistar cargarDatos() {
 		File archivo = new File(RUTA_DAT);
 		if(!archivo.exists()) {
@@ -76,7 +93,7 @@ public class Movistar implements Serializable{
 	public void cargarDatosIniciales() {
 		Internet internet = new Internet(1, "Internet qsy", 100, 50, 25, "Fibra");
 		Cable cable = new Cable(2, "Cable idk", 150, 165);
-		Telefono telefono = new Telefono(3, "Telefono", 50, 505, 100);
+		Telefono telefono = new Telefono(3, "Telefono", 50, "505", 100);
 		this.registrarServicio(internet);
 		this.registrarServicio(cable);
 		this.registrarServicio(telefono);
@@ -86,11 +103,10 @@ public class Movistar implements Serializable{
 		plan.agregarServicio(telefono);
 		this.registrarPlan(plan);
 		Sucursal sucu = new Sucursal(1, "Manoguayabo", "Manoguayabo??");
-		Administrativo admin = new Administrativo(1,"John","Doeee", "402182392", new Date(), "dumb@gmail.com",
-				"8081031", 500, true, sucu, "no se", "no se tampoco","ni idea");
+		Administrativo admin = new Administrativo(1, "John", "Doeee", "402182392", new Date(), "dumb@gmail.com",
+		        "8081031", 500, true, "admin", "admin", sucu, "no se", "no se tampoco", "ni idea");
 		this.losEmpleados.add(admin);
-		
-		
+			
 	}
 	
 	public ArrayList<Personal> getLosEmpleados() {
@@ -108,7 +124,6 @@ public class Movistar implements Serializable{
 	public ArrayList<Servicio> listarServicios() {
 		return losServicios;
 	}
-	
 	
 	public boolean registrarCliente(Cliente c) {
 		if(c == null) {
@@ -155,14 +170,16 @@ public class Movistar implements Serializable{
 	}
 	
 	public boolean solicitarPlan(int idCliente, int idPlan) {
-		Cliente client = buscarCliente(idCliente);
-		Plan plan = buscarPlan(idPlan);
-		
-		if(client == null || plan == null) {
-			return false;
-		}
-		
-		return client.agregarPlan(plan);
+	    Cliente client = buscarCliente(idCliente);
+	    Plan plan = buscarPlan(idPlan);
+
+	    if (client == null || plan == null) {
+	        return false;
+	    }
+	    if (!client.isContratoActivo()) {
+	        return false;
+	    }
+	    return client.agregarPlan(plan);
 	}
 	
 	public boolean modificarPlanCliente(int idCliente, int idPlanActual, int idPlanNuevo) {
@@ -190,6 +207,22 @@ public class Movistar implements Serializable{
 	    }
 
 	    return cliente.quitarPlan(idPlan);
+	}
+	
+	public boolean registrarPersonal(Personal p) {
+	    if (p == null || buscarEmpleado(p.getId()) != null) {
+	        return false;
+	    }
+	    losEmpleados.add(p);
+	    return true;
+	}
+
+	public boolean eliminarPersonal(int id) {
+	    Personal p = buscarEmpleado(id);
+	    if (p == null) {
+	        return false;
+	    }
+	    return losEmpleados.remove(p);
 	}
 	
 	public Personal buscarEmpleado(int id) {
@@ -256,12 +289,28 @@ public class Movistar implements Serializable{
 	    }
 
 	    Servicio aux = buscarServicio(s.getId());
-	    if (aux != null) {
-	        aux.setNombre(s.getNombre());
-	        aux.setPrecioIndividual(s.getPrecioIndividual());
-	        return true;
+	    if (aux == null || aux.getClass() != s.getClass()) {
+	        return false;
 	    }
-	    return false;
+
+	    aux.setNombre(s.getNombre());
+	    aux.setPrecioIndividual(s.getPrecioIndividual());
+
+	    if (aux instanceof Cable) {
+	    	((Cable) aux).setCantCanales(((Cable) s).getCantCanales());
+	    } else if (aux instanceof Internet) {
+	        Internet destino = (Internet) aux;
+	        Internet origen = (Internet) s;
+	        destino.setVelocidadSubida(origen.getVelocidadSubida());
+	        destino.setVelocidadBajada(origen.getVelocidadBajada());
+	        destino.setTipo(origen.getTipo());
+	    } else if (aux instanceof Telefono) {
+	        Telefono destino = (Telefono) aux;
+	        Telefono origen = (Telefono) s;
+	        destino.setNumTelefono(origen.getNumTelefono());
+	        destino.setCantMinutos(origen.getCantMinutos());
+	    }
+	    return true;
 	}
 	
 	public boolean eliminarServicio(int id) {
@@ -296,12 +345,29 @@ public class Movistar implements Serializable{
 	public Factura generarFactura(int idCliente, int idVendedor) {
 	    Cliente cliente = buscarCliente(idCliente);
 	    Personal p = buscarEmpleado(idVendedor);
+	    Calendar hoy = Calendar.getInstance();
+	    int mes = hoy.get(Calendar.MONTH) + 1;
+	    int anio = hoy.get(Calendar.YEAR);
 
 	    if (cliente == null || !(p instanceof Comercial)) {
 	        return null;
 	    }
-	    if (cliente.getPlanesContratados().isEmpty()) {
+	    
+	    if(!cliente.isContratoActivo()) {
+	    	return null;
+	    }
+	    
+	    if (buscarFacturaClienteMes(idCliente, mes, anio) != null) {
 	        return null;
+	    }
+	    
+	    if(contarFacturasPendientes(cliente.getId()) >= 2) {
+	    	cancelarContrato(idCliente);
+	    	return null;
+	    }
+	    
+	    if (cliente.getPlanesContratados().isEmpty()) {
+	    	return null;
 	    }
 
 	    Comercial vendedor = (Comercial) p;
@@ -324,6 +390,82 @@ public class Movistar implements Serializable{
 		busqueda.getCliente().reducirDeuda(busqueda.getMontoTotal());
 		return true;
 		
+	}
+	
+	public int contarFacturasPendientes(int idCliente) {
+		int contador = 0;
+		for(Factura f: lasFacturas) {
+			if(f.getCliente().getId() == idCliente && !f.isPagada()) {
+				contador++;
+			}
+		}
+		return contador;
+	}
+	
+	public Factura buscarFacturaClienteMes(int idCliente, int mes, int anio) {
+		Calendar calendario = Calendar.getInstance();
+		for(Factura f: lasFacturas) {
+			calendario.setTime(f.getFechaEmision());
+			if(f.getCliente().getId() == idCliente && calendario.get(Calendar.MONTH) + 1 == mes && calendario.get(Calendar.YEAR) == anio) {
+				return f;
+			}
+		}
+		return null;
+	}
+	
+	public boolean cancelarContrato(int idCliente) {
+		Cliente cliente = buscarCliente(idCliente);
+		
+		if(cliente == null) {
+			return false;
+		}
+		
+		if(!cliente.isContratoActivo()) {
+			return false;
+		}
+		
+		cliente.quitarTodosLosPlanes();
+		cliente.setContratoActivo(false);
+		return true;
+	}
+	
+	public boolean renovarContrato(int idCliente) {
+		Cliente cliente = buscarCliente(idCliente);
+		
+		if(cliente == null) {
+			return false;
+		}
+		
+		if(cliente.isContratoActivo()) {
+			return false;
+		}
+		
+		if(contarFacturasPendientes(cliente.getId()) >= 2) {
+			return false;
+		}
+		
+		cliente.setContratoActivo(true);
+		return true;
+	}
+	
+	public ArrayList<Cliente> listarClientesQueDeben() {
+	    ArrayList<Cliente> deben= new ArrayList<>();
+	    for (Cliente c : losClientes) {
+	        if (contarFacturasPendientes(c.getId()) > 0) {
+	            deben.add(c);
+	        }
+	    }
+	    return deben;
+	}
+
+	public ArrayList<Cliente> listarContratosCancelados() {
+	    ArrayList<Cliente> cancelados = new ArrayList<>();
+	    for (Cliente c : losClientes) {
+	        if (!c.isContratoActivo()) {
+	            cancelados.add(c);
+	        }
+	    }
+	    return cancelados;
 	}
 	
 	public ArrayList<Plan> consultarPlanesCliente(int idCliente) {
@@ -371,18 +513,18 @@ public class Movistar implements Serializable{
 	}
 	
 	public ArrayList<Factura> reportePorLocal(Sucursal sucursal) {
-		ArrayList<Factura> resultadosLocal = new ArrayList<>();
-		
-		if(sucursal == null) {
-			return resultadosLocal;
-		}
-		
-		for(Factura f: lasFacturas) {
-			if(f.getSucursal().equals(sucursal)) {
-				resultadosLocal.add(f);
-			}
-		}
-		return resultadosLocal;
+	    ArrayList<Factura> resultadosLocal = new ArrayList<>();
+
+	    if (sucursal == null) {
+	        return resultadosLocal;
+	    }
+
+	    for (Factura f : lasFacturas) {
+	        if (sucursal.equals(f.getSucursal())) {
+	            resultadosLocal.add(f);
+	        }
+	    }
+	    return resultadosLocal;
 	}
 	
 	public ArrayList<Factura> facturasCliente(int idCliente){
