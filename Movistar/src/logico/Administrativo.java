@@ -13,7 +13,7 @@ public class Administrativo extends Personal {
 			String telefono, double salarioBase, boolean estado, String usuario, String clave, Sucursal sucursal,
 			String departamento, String cargo, String extensionTelefonica) {
 		super(id, nombre, apellidos, cedula, fechaNacimiento, correo, telefono, salarioBase, estado, usuario, clave,
-				sucursal);
+				sucursal, extensionTelefonica);
 		this.departamento = departamento;
 		this.cargo = cargo;
 		this.extensionTelefonica = extensionTelefonica;

@@ -18,9 +18,10 @@ public abstract class Personal implements Serializable{
 	protected String usuario;
 	protected String clave;
 	protected Sucursal sucursal;
+	protected String tipo;
 	
 	public Personal(int id, String nombre, String apellidos, String cedula, Date fechaNacimiento, String correo,
-			String telefono, double salarioBase, boolean estado, String usuario, String clave, Sucursal sucursal) {
+			String telefono, double salarioBase, boolean estado, String usuario, String clave, Sucursal sucursal, String tipo) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -34,6 +35,7 @@ public abstract class Personal implements Serializable{
 		this.usuario = usuario;
 		this.clave = clave;
 		this.sucursal = sucursal;
+		this.tipo = tipo;
 	}
 
 	public String getNombre() {
