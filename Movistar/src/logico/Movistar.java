@@ -250,20 +250,24 @@ public class Movistar implements Serializable{
 	    Plan aux = buscarPlan(p.getId());
 	    if (aux != null) {
 	        aux.setNombre(p.getNombre());
+	        aux.reemplazarServicios(p.getServiciosIncluidos());
 	        return true;
 	    }
 	    return false;
 	}
 	
 	public boolean eliminarPlan(int id) {
-		Plan elim = buscarPlan(id);
-		
-		if(elim != null) {
-			losPlanes.remove(elim);
-			return true;
-		}
-		
-		return false;
+	    Plan elim = buscarPlan(id);
+	    if (elim == null) {
+	        return false;
+	    }
+	    for (Cliente c : losClientes) {
+	        if (c.tienePlan(id)) {
+	            return false;
+	        }
+	    }
+	    losPlanes.remove(elim);
+	    return true;
 	}
 
 	public Plan buscarPlan(int id) {

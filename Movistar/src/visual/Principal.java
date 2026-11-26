@@ -28,6 +28,7 @@ public class Principal extends JFrame {
 	private JPanel contentPane;
 	private Dimension dim;
 	private JPopupMenu popupMenu;
+	private JPopupMenu popupMenu_Plan_Servicio;
 
 	/**
 	 * Launch the application.
@@ -101,10 +102,40 @@ public class Principal extends JFrame {
 		btnControlDeClientes.setBounds(68, 251, 157, 23);
 		contentPanel.add(btnControlDeClientes);
 		
+		popupMenu_Plan_Servicio = new JPopupMenu();
+		
 		JButton btnPlanesYServicios = new JButton("Planes y Servicios");
+		btnPlanesYServicios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				popupMenu_Plan_Servicio.show(btnPlanesYServicios, 0, btnPlanesYServicios.getHeight());
+			}
+		});
 		btnPlanesYServicios.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnPlanesYServicios.setBounds(68, 289, 157, 23);
 		contentPanel.add(btnPlanesYServicios);
+		
+		
+		addPopup(btnPlanesYServicios, popupMenu_Plan_Servicio);
+		
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Gesti\u00F3n de Servicios");
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GestionDeServicios servicios = new GestionDeServicios();
+				servicios.setLocationRelativeTo(null); 
+				servicios.setVisible(true);
+			}
+		});
+		popupMenu_Plan_Servicio.add(mntmNewMenuItem_2);
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Gesti\u00F3n de Planes");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GestionDePlanes planes = new GestionDePlanes();
+				planes.setLocationRelativeTo(null); 
+				planes.setVisible(true);
+			}
+		});
+		popupMenu_Plan_Servicio.add(mntmNewMenuItem_3);
 		
 		JButton btnFacturacin = new JButton("Facturaci\u00F3n");
 		btnFacturacin.setFont(new Font("Tahoma", Font.BOLD, 11));

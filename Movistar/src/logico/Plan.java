@@ -75,4 +75,10 @@ public class Plan implements Serializable{
 		return false;
 	}
 	
+	public void reemplazarServicios(ArrayList<Servicio> nuevos) {
+	    ArrayList<Servicio> copia = new ArrayList<>(nuevos);
+	    serviciosIncluidos.clear();
+	    serviciosIncluidos.addAll(copia);
+	    this.precioMensual = calcularPrecio();
+	}
 }
